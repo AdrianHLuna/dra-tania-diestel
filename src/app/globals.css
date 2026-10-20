@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/*
+ * Dra. Tania Leticia Diestel Bautista — Cardiología / Alta Especialidad en
+ * Ecocardiografía, Tuxtla Gutiérrez. Dirección de diseño "Pulso Clínico":
+ * paleta y tipografía tomadas TAL CUAL de la guía de marca real entregada
+ * (carpeta "PALETA DE COLORES", PDF oficial) — vino/rojo como acento
+ * primario (CTAs, categoría "Enfermedades") y azul como acento secundario
+ * de uso diagnóstico (categoría "Servicios"), nunca mezclados en degradado
+ * (lección de dr-gregorio-arcos en registro-disenos.md: un acento manda,
+ * el otro apoya — aquí se separan por zona/rol en vez de fundirse). El
+ * motivo de línea de electrocardiograma (trazo de pulso) es la firma visual
+ * del sitio, tomado del logotipo real (icono corazón + trazo EKG + ondas
+ * de eco), no existe en ningún otro sitio ya registrado.
+ */
+:root {
+  --color-ink: #2a1c22; /* texto principal, vino muy oscuro casi negro */
+  --color-ink-soft: #6b5259; /* texto secundario */
+  --color-wine: #510d35; /* acento primario oscuro — CTAs, encabezados de condición */
+  --color-wine-dark: #3a0926;
+  --color-red: #b90c14; /* rojo de marca — trazo EKG, alarmas, detalles vivos */
+  --color-blush: #e2b5b9; /* rosa de marca — superficies suaves, fondos de sección */
+  --color-blue: #3c77b4; /* azul de marca — acento secundario, diagnóstico/servicios */
+  --color-blue-dark: #2d4a67;
+  --color-gold: #c7a24a; /* dorado de marca — folios, badges terciarios */
+  /* Crema de marca — redefinida 2026-10-19 (feedback directo del usuario,
+     "el f5edd4 no me gusta como esta integrada"): se retira como fondo
+     general/omnipresente y se reserva a UNA sola banda de acento (barra de
+     estadísticas) en vez de teñir Header, Hero y secciones completas. Blanco
+     pasa a ser el fondo dominante del sitio. */
+  --color-cream: #f5edd4;
+  --color-surface: #ffffff;
+  --color-surface-soft: #fbf3ef; /* blush muy claro, agrupaciones secundarias */
+  --color-line: #e8d9d4; /* bordes/divisores */
+
+  --background: var(--color-surface);
+  --foreground: var(--color-ink);
+
+  --shadow-pulse: 0 10px 28px -6px rgba(81, 13, 53, 0.12), 0 2px 8px -2px rgba(81, 13, 53, 0.08);
+  --shadow-pulse-lg: 0 22px 40px -10px rgba(81, 13, 53, 0.18), 0 6px 14px -4px rgba(81, 13, 53, 0.1);
+}
+
+@theme inline {
+  --color-primary: var(--color-wine);
+  --color-primary-foreground: #ffffff;
+  --color-accent: var(--color-blue);
+  --color-accent-foreground: #ffffff;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--color-surface-soft);
+  --color-muted-foreground: var(--color-ink-soft);
+  --color-border: var(--color-line);
+  --font-sans: var(--font-caviar);
+  --font-heading: var(--font-caviar);
+  --font-script: var(--font-allura);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-caviar), system-ui, sans-serif;
+  line-height: 1.65;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: var(--font-caviar), system-ui, sans-serif;
+  font-weight: 700;
+}
+
+/* Firma caligráfica de marca — SOLO para el nombre de pila en el logotipo y
+ * acentos puntuales (nunca bloques de texto largo, ver nota del logo real
+ * en lib/fonts.ts). */
+.font-script {
+  font-family: var(--font-allura), cursive;
+}
+
+.eyebrow-pulso {
+  font-family: var(--font-caviar), system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Franja de credenciales — mismo tratamiento tipográfico que .eyebrow-pulso
+ * pero SIN mayúsculas forzadas: "Céd Prof: NNNNNNNN (SIGLAS)" debe verse tal
+ * cual (AGENTS.md §3). Nunca reusar .eyebrow-pulso para texto de cédulas. */
+.credentials-pulso {
+  font-family: var(--font-caviar), system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.tap-target {
+  min-height: 48px;
+}
+
+.image-fallback-pulso {
+  background: linear-gradient(160deg, var(--color-surface-soft) 0%, var(--color-blush) 100%);
+  color: var(--color-wine);
+}
+
+/* Trazo de electrocardiograma dibujado al cargar — firma de animación del
+ * sitio ("Pulso Clínico"). Respeta prefers-reduced-motion. */
+.ekg-line {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: ekg-draw 1.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ekg-line {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ekg-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.reveal-pulso {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-pulso.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-pulso {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
