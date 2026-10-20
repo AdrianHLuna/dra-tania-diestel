@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { Route } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { doctor, symptoms, diseases } from "@/data";
@@ -32,6 +33,7 @@ export async function generateMetadata(props: PageProps<"/sintomas/[slug]">): Pr
       url: `/sintomas/${symptom.slug}`,
       type: "article",
       locale: "es_MX",
+      images: symptom.image ? [{ url: symptom.image, width: 1200, height: 630, alt: symptom.name }] : undefined,
     },
   };
 }
@@ -94,17 +96,33 @@ export default async function SymptomPage(props: PageProps<"/sintomas/[slug]">) 
         )}
 
         {relatedConditions.length > 0 && (
-          <section className="mt-10 rounded-xl border border-[var(--color-gold)]/50 bg-[var(--color-surface-soft)] p-6">
+          <section className="mt-10 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface-soft)] p-6">
             <p className="eyebrow-pulso text-[var(--color-wine)]">Puede estar relacionado con</p>
-            <ul className="mt-3 space-y-2">
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {relatedConditions.map((d) => (
-                <li key={d.id}>
-                  <Link href={`/enfermedades/${d.slug}` as Route} className="text-[var(--color-ink)] hover:text-[var(--color-wine)]">
-                    {d.name}
-                  </Link>
-                </li>
+                <Link
+                  key={d.id}
+                  href={`/enfermedades/${d.slug}` as Route}
+                  className="group flex items-center gap-3 rounded-lg border border-[var(--color-line)] bg-white p-2.5 transition-all hover:border-[var(--color-wine)] hover:shadow-sm"
+                >
+                  <div className="relative h-14 w-16 shrink-0 overflow-hidden rounded-md bg-[var(--color-surface-soft)]">
+                    <Image
+                      src={d.image}
+                      alt={d.name}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="64px"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="eyebrow-pulso text-[10px] text-[var(--color-wine)]">Enfermedad</span>
+                    <p className="truncate text-sm font-medium text-[var(--color-ink)] group-hover:text-[var(--color-wine)]">
+                      {d.name}
+                    </p>
+                  </div>
+                </Link>
               ))}
-            </ul>
+            </div>
           </section>
         )}
 

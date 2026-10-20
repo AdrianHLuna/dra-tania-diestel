@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     description: doctor.bio,
     locale: "es_MX",
     type: "website",
+    images: [{ url: doctor.heroPhoto || doctor.photo, width: 1200, height: 630, alt: `${doctor.title} ${doctor.name}` }],
   },
 };
 

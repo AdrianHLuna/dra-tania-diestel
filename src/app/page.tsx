@@ -61,8 +61,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="relative h-72 w-full overflow-hidden rounded-2xl border border-[var(--color-line)] bg-white shadow-[var(--shadow-pulse-lg)] sm:h-96">
-            <DoctorPortrait src={doctor.photo} alt={`${doctor.title} ${doctor.name}`} className="h-full w-full" priority />
+          <div className="relative h-72 w-full overflow-hidden rounded-2xl border border-[var(--color-line)] bg-white shadow-[var(--shadow-pulse-lg)] sm:h-96 md:h-[420px] lg:h-[460px]">
+            <DoctorPortrait
+              src={doctor.heroPhoto || doctor.photo}
+              alt={`${doctor.title} ${doctor.name}`}
+              className="h-full w-full"
+              priority
+            />
           </div>
         </div>
       </section>
@@ -83,38 +88,55 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* ─── SOBRE LA DOCTORA ─── */}
+      {/* ─── SOBRE LA DOCTORA (ABOUT ME) ─── */}
       <section className="border-b border-[var(--color-line)] bg-white px-6 py-16">
-        <div className="mx-auto max-w-5xl">
-          <p className="eyebrow-pulso text-[var(--color-wine)]">{doctor.specialistTitle}</p>
-          <h2 className="mt-2 font-heading text-2xl text-[var(--color-ink)] sm:text-3xl">
-            {doctor.title} {doctor.name}
-          </h2>
-          <p className="mt-2 text-sm text-[var(--color-ink-soft)]">{formatCredentials(doctor)}</p>
-          <p className="mt-4 border-l-2 border-[var(--color-red)] pl-4 italic text-[var(--color-ink-soft)]">
-            &ldquo;{doctor.philosophy}&rdquo;
-          </p>
-          <p className="mt-5 max-w-3xl text-[var(--color-ink)]/90">{doctor.bio}</p>
-
-          {doctor.certifications.length > 0 && (
-            <ul className="mt-6 space-y-2 text-sm text-[var(--color-ink)]/85">
-              {doctor.certifications.map((c) => (
-                <li key={c.name} className="flex items-start gap-2">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-blue)]" aria-hidden="true" />
-                  <span>{c.name}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <div className="mt-6 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2 sm:max-w-xl">
-            <div className="flex items-start gap-2 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface-soft)] p-3">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-wine)]" aria-hidden="true" />
-              <span>Consultorio en {doctor.city}, {doctor.state}.</span>
+        <div className="mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+            {/* Foto de la doctora en consulta */}
+            <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface-soft)] shadow-[var(--shadow-pulse-lg)] sm:aspect-[3/4] lg:aspect-[4/5]">
+                <DoctorPortrait
+                  src={doctor.aboutPhoto || doctor.photo}
+                  alt={`${doctor.title} ${doctor.name} — ${doctor.specialistTitle}`}
+                  className="h-full w-full"
+                />
+              </div>
+              <div className="pointer-events-none absolute -bottom-3 -right-3 -z-10 h-full w-full rounded-2xl bg-[var(--color-wine)]/10" />
             </div>
-            <div className="flex items-start gap-2 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface-soft)] p-3">
-              <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-wine)]" aria-hidden="true" />
-              <span>{doctor.schedule}</span>
+
+            {/* Credenciales y semblanza */}
+            <div>
+              <p className="eyebrow-pulso text-[var(--color-wine)]">{doctor.specialistTitle}</p>
+              <h2 className="mt-2 font-heading text-2xl text-[var(--color-ink)] sm:text-3xl lg:text-4xl">
+                {doctor.title} {doctor.name}
+              </h2>
+              <p className="mt-2 text-sm text-[var(--color-ink-soft)]">{formatCredentials(doctor)}</p>
+              <p className="mt-4 border-l-2 border-[var(--color-red)] pl-4 italic text-[var(--color-ink-soft)]">
+                &ldquo;{doctor.philosophy}&rdquo;
+              </p>
+              <p className="mt-5 text-[var(--color-ink)]/90">{doctor.bio}</p>
+
+              {doctor.certifications.length > 0 && (
+                <ul className="mt-6 space-y-2 text-sm text-[var(--color-ink)]/85">
+                  {doctor.certifications.map((c) => (
+                    <li key={c.name} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-blue)]" aria-hidden="true" />
+                      <span>{c.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <div className="mt-6 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
+                <div className="flex items-start gap-2 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface-soft)] p-3">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-wine)]" aria-hidden="true" />
+                  <span>Consultorio en {doctor.city}, {doctor.state}.</span>
+                </div>
+                <div className="flex items-start gap-2 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface-soft)] p-3">
+                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-wine)]" aria-hidden="true" />
+                  <span>{doctor.schedule}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

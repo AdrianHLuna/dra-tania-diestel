@@ -92,6 +92,8 @@ export const DoctorProfileSchema = z.object({
   openingHours: z.array(z.string()).optional(),
   acceptingNewPatients: z.boolean().default(true),
   photo: z.string(),
+  heroPhoto: z.string().optional(),
+  aboutPhoto: z.string().optional(),
   bio: z.string().min(100),
   philosophy: z.string(),
   experience: z.array(ExperienceItemSchema),

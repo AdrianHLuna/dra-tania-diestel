@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { Route } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { doctor, diseases, services, symptoms } from "@/data";
@@ -31,6 +32,7 @@ export async function generateMetadata(props: PageProps<"/enfermedades/[slug]">)
       url: `/enfermedades/${disease.slug}`,
       type: "article",
       locale: "es_MX",
+      images: disease.image ? [{ url: disease.image, width: 1200, height: 630, alt: disease.name }] : undefined,
     },
   };
 }
@@ -121,24 +123,56 @@ export default async function DiseasePage(props: PageProps<"/enfermedades/[slug]
         </section>
 
         {(relatedServices.length > 0 || relatedSymptoms.length > 0) && (
-          <section className="mt-10 rounded-xl border border-[var(--color-wine)]/30 bg-[var(--color-surface-soft)] p-6">
-            <p className="eyebrow-pulso text-[var(--color-wine)]">Relacionados</p>
-            <ul className="mt-3 space-y-2">
+          <section className="mt-10 rounded-xl border border-[var(--color-line)] bg-[var(--color-surface-soft)] p-6">
+            <p className="eyebrow-pulso text-[var(--color-wine)]">Relacionados con esta condición</p>
+            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {relatedServices.map((s) => (
-                <li key={s.id}>
-                  <Link href={`/servicios/${s.slug}` as Route} className="text-[var(--color-ink)] hover:text-[var(--color-blue)]">
-                    {s.name}
-                  </Link>
-                </li>
+                <Link
+                  key={s.id}
+                  href={`/servicios/${s.slug}` as Route}
+                  className="group flex items-center gap-3 rounded-lg border border-[var(--color-line)] bg-white p-2.5 transition-all hover:border-[var(--color-blue)] hover:shadow-sm"
+                >
+                  <div className="relative h-14 w-16 shrink-0 overflow-hidden rounded-md bg-[var(--color-surface-soft)]">
+                    <Image
+                      src={s.image}
+                      alt={s.name}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="64px"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="eyebrow-pulso text-[10px] text-[var(--color-blue)]">Estudio / Servicio</span>
+                    <p className="truncate text-sm font-medium text-[var(--color-ink)] group-hover:text-[var(--color-blue)]">
+                      {s.name}
+                    </p>
+                  </div>
+                </Link>
               ))}
               {relatedSymptoms.map((s) => (
-                <li key={s.id}>
-                  <Link href={`/sintomas/${s.slug}` as Route} className="text-[var(--color-ink)] hover:text-[var(--color-wine)]">
-                    {s.name}
-                  </Link>
-                </li>
+                <Link
+                  key={s.id}
+                  href={`/sintomas/${s.slug}` as Route}
+                  className="group flex items-center gap-3 rounded-lg border border-[var(--color-line)] bg-white p-2.5 transition-all hover:border-[var(--color-wine)] hover:shadow-sm"
+                >
+                  <div className="relative h-14 w-16 shrink-0 overflow-hidden rounded-md bg-[var(--color-surface-soft)]">
+                    <Image
+                      src={s.image}
+                      alt={s.name}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="64px"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className="eyebrow-pulso text-[10px] text-[var(--color-gold)]">Síntoma frecuente</span>
+                    <p className="truncate text-sm font-medium text-[var(--color-ink)] group-hover:text-[var(--color-wine)]">
+                      {s.name}
+                    </p>
+                  </div>
+                </Link>
               ))}
-            </ul>
+            </div>
           </section>
         )}
 
