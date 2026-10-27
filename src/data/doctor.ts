@@ -54,4 +54,5 @@ export const doctor: DoctorProfile = {
     { degree: "Especialidad en Cardiología", institution: "Universidad Nacional Autónoma de México (UNAM)" },
   ],
   sameAs: [],
+  ga4Id: "G-QCKB40T73Q",
 };
