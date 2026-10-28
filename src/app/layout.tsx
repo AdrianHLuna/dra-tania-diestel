@@ -34,6 +34,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es-MX" className={`${caviarDreams.variable} ${allura.variable}`}>
       <head>
+        {/* Consent Mode — DEBE ir antes de cargar GTM/gtag (AGENTS.md §8,
+            regla obligatoria desde 2026-09-22). Sin este bloque, GTM/GA4/
+            Ads empiezan a enviar datos de inmediato al cargar la página, sin
+            esperar el clic de "Aceptar" en CookieConsentBanner.tsx — lo cual
+            contradice literalmente lo que /aviso-de-privacidad promete por
+            escrito. Mismo patrón de omisión encontrado antes en
+            dr-gregorio-arcos al pegar los snippets de GTM en crudo. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  analytics_storage: 'denied',
+  ad_storage: 'denied',
+  ad_user_data: 'denied',
+  ad_personalization: 'denied',
+  wait_for_update: 500
+});`,
+          }}
+        />
+
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
